@@ -30,7 +30,7 @@ jobs:
       - name: Make exploits
         run: |
           cd Exploits/Windows/
-          cl.exe /EHsc /std:c++17 RedSun.cpp /link ntdll.lib cldapi.lib /OUT:RedSun.exe
+          cl.exe /EHsc /std:c++17 RedSun.cpp /link ntdll.lib cldapi.lib advapi32.lib ole32.lib user32.lib /OUT:RedSun.exe
           del RedSun.cpp
           cd ../../
 
