@@ -5,18 +5,29 @@ typedef NativeFunc = Int32 Function();
 typedef DartFunc = int Function();
 
 class Backend {
-  late DynamicLibrary _lib;
+  late final DynamicLibrary _lib;
 
-  late DartFunc runWindows;
-  late DartFunc runLinux;
+  late final DartFunc runWindows;
+  late final DartFunc runLinux;
 
   Backend() {
-    _lib = Platform.isWindows
-        ? DynamicLibrary.open("run.dll")
-        : DynamicLibrary.open("librun.so");
+    _lib = _loadLibrary();
 
-    runWindows = _lib.lookupFunction<NativeFunc, DartFunc>("run_windows");
-    runLinux   = _lib.lookupFunction<NativeFunc, DartFunc>("run_linux");
+    runWindows =
+        _lib.lookupFunction<NativeFunc, DartFunc>("run_windows");
+
+    runLinux =
+        _lib.lookupFunction<NativeFunc, DartFunc>("run_linux");
+  }
+
+  DynamicLibrary _loadLibrary() {
+    final exeDir = File(Platform.resolvedExecutable).parent.path;
+
+    final path = Platform.isWindows
+        ? "$exeDir\\run.dll"
+        : "$exeDir/librun.so";
+
+    return DynamicLibrary.open(path);
   }
 
   int runOS() {
