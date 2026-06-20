@@ -1,119 +1,94 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:ffi';
+import 'package:ffi/ffi.dart';
 
-typedef NativeFunc = Int32 Function();
-typedef DartFunc = int Function();
+typedef NativeRun = Int32 Function(
+  Pointer<Utf8>,
+  Pointer<Utf8>,
+);
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+typedef DartRun = int Function(
+  Pointer<Utf8>,
+  Pointer<Utf8>,
+);
 
-  final backendPath = await AppBootstrap.init();
-
-  final backend = Backend(backendPath);
-
-  runApp(PassF0rgeApp(backend: backend));
-}
-
-class AppBootstrap {
-  static Future<String> init() async {
-    final dir = await _getAppDir();
-    final dllPath = "$dir\\run.dll";
-
-    final file = File(dllPath);
-    if (!await file.exists()) {
-      final data = await rootBundle.load("assets/run.dll");
-      await file.create(recursive: true);
-      await file.writeAsBytes(data.buffer.asUint8List());
-    }
-
-    return dir;
-  }
-
-  static Future<String> _getAppDir() async {
-    final base =
-        Platform.environment['LOCALAPPDATA'] ??
-        Directory.systemTemp.path;
-
-    final dir = Directory("$base\\PassF0rge");
-
-    if (!await dir.exists()) {
-      await dir.create(recursive: true);
-    }
-
-    return dir.path;
-  }
+void main() {
+  runApp(const PassF0rgeApp());
 }
 
 class Backend {
   late final DynamicLibrary _lib;
+  late final DartRun run;
 
-  late final DartFunc runWindows;
-  late final DartFunc runLinux;
+  Backend() {
+    _lib = Platform.isWindows
+        ? DynamicLibrary.open("run.dll")
+        : DynamicLibrary.open("librun.so");
 
-  Backend(String appDir) {
-    final path = Platform.isWindows
-        ? "$appDir\\run.dll"
-        : "$appDir/librun.so";
-
-    _lib = DynamicLibrary.open(path);
-
-    runWindows =
-        _lib.lookupFunction<NativeFunc, DartFunc>("run_windows");
-
-    runLinux =
-        _lib.lookupFunction<NativeFunc, DartFunc>("run_linux");
+    run = _lib.lookupFunction<NativeRun, DartRun>("run");
   }
 
-  int runOS() {
-    if (Platform.isWindows) return runWindows();
-    if (Platform.isLinux) return runLinux();
-    return -1;
+  int runApp(String user, String pass) {
+    final u = user.toNativeUtf8();
+    final p = pass.toNativeUtf8();
+
+    final result = run(u, p);
+
+    calloc.free(u);
+    calloc.free(p);
+
+    return result;
   }
 }
 
 class PassF0rgeApp extends StatelessWidget {
-  final Backend backend;
-
-  const PassF0rgeApp({super.key, required this.backend});
+  const PassF0rgeApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "PassF0rge",
-      home: Home(backend: backend),
+      home: Home(),
     );
   }
 }
 
 class Home extends StatefulWidget {
-  final Backend backend;
-
-  const Home({super.key, required this.backend});
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  final user = TextEditingController();
-  final pass1 = TextEditingController();
-  final pass2 = TextEditingController();
-  final status = TextEditingController();
+  final backend = Backend();
+
+  final userCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
+  final confirmCtrl = TextEditingController();
+  final statusCtrl = TextEditingController();
 
   void run() {
-    int result = widget.backend.runOS();
+    final user = userCtrl.text;
+    final pass = passCtrl.text;
+    final confirm = confirmCtrl.text;
+
+    if (pass != confirm) {
+      setState(() {
+        statusCtrl.text = "Passwords do not match";
+      });
+      return;
+    }
+
+    final result = backend.runApp(user, pass);
 
     setState(() {
       if (result == 100) {
-        status.text = "PassF0rge: Password Change Failed";
-      } else if (result == 200) {
-        status.text = "PassF0rge: Password Change Success!";
+        statusCtrl.text = "Login success";
       } else {
-        status.text = "PassF0rge: Execution failed";
+        statusCtrl.text = "Login failed";
       }
     });
   }
@@ -124,9 +99,12 @@ class _HomeState extends State<Home> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF1B1B2F), Color(0xFF0F0F17)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF1B1B2F),
+              Color(0xFF0F0F17),
+            ],
           ),
         ),
         child: Center(
@@ -137,7 +115,7 @@ class _HomeState extends State<Home> {
               const Text(
                 "PassF0rge",
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                   letterSpacing: 2,
@@ -147,7 +125,7 @@ class _HomeState extends State<Home> {
               const SizedBox(height: 6),
 
               const Text(
-                "Secure FFI Password Tool Engine",
+                "Secure FFI Auth Engine",
                 style: TextStyle(
                   color: Colors.white54,
                   fontSize: 12,
@@ -156,7 +134,7 @@ class _HomeState extends State<Home> {
 
               const SizedBox(height: 20),
 
-              // Glass UI panel
+              /// GLASS PANEL
               ClipRRect(
                 borderRadius: BorderRadius.circular(18),
                 child: BackdropFilter(
@@ -173,7 +151,7 @@ class _HomeState extends State<Home> {
                       children: [
 
                         TextField(
-                          controller: user,
+                          controller: userCtrl,
                           decoration: const InputDecoration(
                             hintText: "Username",
                           ),
@@ -182,7 +160,7 @@ class _HomeState extends State<Home> {
                         const SizedBox(height: 10),
 
                         TextField(
-                          controller: pass1,
+                          controller: passCtrl,
                           obscureText: true,
                           decoration: const InputDecoration(
                             hintText: "Password",
@@ -192,7 +170,7 @@ class _HomeState extends State<Home> {
                         const SizedBox(height: 10),
 
                         TextField(
-                          controller: pass2,
+                          controller: confirmCtrl,
                           obscureText: true,
                           decoration: const InputDecoration(
                             hintText: "Confirm Password",
@@ -202,7 +180,7 @@ class _HomeState extends State<Home> {
                         const SizedBox(height: 10),
 
                         TextField(
-                          controller: status,
+                          controller: statusCtrl,
                           readOnly: true,
                           decoration: const InputDecoration(
                             hintText: "Status...",
