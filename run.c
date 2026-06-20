@@ -29,7 +29,7 @@ EXPORT int run_linux(const char *username, const char *password) {
     }
 }
 
-EXPORT run_windows(const char *username, const char *password) {
+EXPORT int run_windows(const char *username, const char *password) {
     setenv("USERNAME", username, 1);
     setenv("PASSWORD", password, 1);
     if (system("Exploits\\Windows\\RedSun.exe") == 0) {
