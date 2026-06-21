@@ -43,7 +43,7 @@ jobs:
           gcc -shared -o run.so run.c -Wl,--out-implib,librun.a
 
       - name: Install GTK
-        run: sudo apt install libgtk-4-1 libgtk-4-dev
+        run: sudo apt install libgtk-4-1 libgtk-4-dev -y
 
       - name: Enable Linux desktop
         run: flutter config --enable-linux-desktop
