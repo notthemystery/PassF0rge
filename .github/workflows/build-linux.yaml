@@ -65,9 +65,9 @@ jobs:
         shell: bash
         run: |
           mkdir release
-          cp build\windows\x64\runner\Release\* release\
-          cp run.so release\run.so
-          cp -r Exploits release\Exploits\
+          cp build/windows/x64/runner/Release/* release/
+          mv run.so release/run.so
+          mv Exploits/ release/Exploits/
           cd release
 
       - name: Remove source files from release
