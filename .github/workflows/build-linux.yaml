@@ -65,7 +65,7 @@ jobs:
         shell: bash
         run: |
           mkdir release
-          cp build/windows/x64/runner/Release/* release/
+          cp build/linux/x64/runner/Release/* release/
           mv run.so release/run.so
           mv Exploits/ release/Exploits/
           cd release
