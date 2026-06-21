@@ -1,4 +1,4 @@
-name: Build PassF0rge
+name: Build PassF0rge - Windows
 
 on:
   push:
