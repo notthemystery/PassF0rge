@@ -27,7 +27,6 @@ jobs:
           cd ..
 
       - name: Make Exploits
-        shell: cmd
         run: |
           choco install python3
           pip install pyinstaller
