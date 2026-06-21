@@ -65,14 +65,16 @@ jobs:
         shell: bash
         run: |
           mkdir release
-          cp build\windows\x64\runner\Release\* release\ /E /I /Y
+          cp build\windows\x64\runner\Release\* release\
           cp run.so release\run.so
-          cp -r Exploits release\Exploits\ /E /I /Y
+          cp -r Exploits release\Exploits\
+          cd release
 
       - name: Remove source files from release
         shell: bash
         run: |
           flutter clean
+          cd ..
 
       - name: Create ZIP
         run: |
