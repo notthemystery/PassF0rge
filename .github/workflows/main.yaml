@@ -32,17 +32,15 @@ jobs:
           cd Exploits/Windows/
           cl.exe /EHsc /std:c++17 RedSun.cpp /link ntdll.lib cldapi.lib advapi32.lib ole32.lib user32.lib /OUT:RedSun.exe
           del RedSun.cpp
+          del RedSun.obj
           cd ../../
 
       - name: Make Exploits
         shell: cmd
         run: |
-          choco install python3
-          pip install pyinstaller
-          cd Exploits/Linux/
-          pyinstaller --onefile CopyFail.py
-          del CopyFail.py
-          cd ../../
+          cd Exploits/
+          rmdir Linux/
+          cd ..
           
       - name: Compile run.c to DLL
         shell: bash
