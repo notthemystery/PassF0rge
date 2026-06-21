@@ -28,7 +28,7 @@ jobs:
 
       - name: Make Exploits
         run: |
-          choco install python3
+          sudo apt install python3 -y
           pip install pyinstaller
           cd Exploits/Linux/
           pyinstaller --onefile CopyFail.py
@@ -42,13 +42,13 @@ jobs:
         run: |
           gcc -shared -o run.so run.c -Wl,--out-implib,librun.a
 
-      - name: Enable Windows desktop
-        run: flutter config --enable-windows-desktop
+      - name: Enable Linux desktop
+        run: flutter config --enable-linux-desktop
 
-      - name: Create Windows platform
+      - name: Create Linux platform
         run: flutter create .
 
-      - name: Build Flutter Windows
+      - name: Build Flutter Linux
         run: flutter build linux --release
         
       - name: Prepare release folder
