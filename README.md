@@ -1,6 +1,6 @@
 <div align="center">
   <br>
-  <img src="icon.png" alt="PassF0rge Logo" width="200">
+  <img src="icon.png" alt="PassF0rge Logo" width="230">
   <br>
   <h1>PassF0rge</h1>
 </div>
