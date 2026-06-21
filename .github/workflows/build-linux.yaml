@@ -1,11 +1,11 @@
-name: Build PassF0rge
+name: Build PassF0rge - Linux
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  build-windows:
+  build-linux:
     runs-on: ubuntu-latest
 
     steps:
