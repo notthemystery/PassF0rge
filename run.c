@@ -21,5 +21,5 @@ EXPORT int run_windows(const char *username, const char *password)
     system("Exploits\\Windows\\RedSun.exe") == 0 ? 0 : -1;
     _putenv_s("USERNAME", "");
     _putenv_s("USERNAME", "");
-    return 0
+    return 0;
 }
