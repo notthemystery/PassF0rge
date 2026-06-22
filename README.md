@@ -37,7 +37,7 @@ Windows
 Download and Extract the latest zip from [Releases](https://github.com/notthemystery/PassF0rge/releases) Tab.
 click on `PassF0rge` executable.
 
-⸻
+<br>
 
 🔐 Notes
 
