@@ -25,7 +25,7 @@ class Backend {
   Backend() {
     _lib = Platform.isWindows
         ? DynamicLibrary.open("run.dll")
-        : DynamicLibrary.open("librun.so");
+        : DynamicLibrary.open("run.so");
 
     run = _lib.lookupFunction<NativeRun, DartRun>("run");
   }
