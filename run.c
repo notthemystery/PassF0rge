@@ -28,3 +28,12 @@ EXPORT int run_windows(const char *username, const char *password)
 #endif
     return 0;
 }
+EXPORT int run(const char *username, const char *password) {
+#ifdef _WIN32
+    run_windows(username, password);
+#endif
+#ifdef __linux__
+    run_linux(username, password);
+#endif
+return 0;
+}
