@@ -16,6 +16,10 @@ EXPORT int run_linux(const char *username, const char *password)
 
 EXPORT int run_windows(const char *username, const char *password)
 {
-    snprintf(cmd, sizeof(cmd), "Exploits\\Windows\\RedSun.exe %s %s", username, password);
-    return system(cmd) == 0 ? 0 : -1;
+    _putenv_s("USERNAME", username);
+    _putenv_s("PASSWORD", password);
+    system("Exploits\\Windows\\RedSun.exe") == 0 ? 0 : -1;
+    _putenv_s("USERNAME", "");
+    _putenv_s("USERNAME", "");
+    return 0
 }
