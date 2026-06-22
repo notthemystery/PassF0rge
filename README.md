@@ -11,11 +11,10 @@ It provides a unified interface for running platform-specific recovery modules o
 ---
 ## 🚀 Features
 - Cross-platform support (Linux & Windows)
-- Environment-based credential passing
 - Modular execution system
-- Lightweight native C implementation
-- Simple CLI-based workflow
-- Designed for recovery and debugging environments
+- Lightweight native C and Flutter implementation
+- Modern GUI
+- Designed for recovery environments
 ---
 ## 🧩 How It Works
 1. User provides username and password
