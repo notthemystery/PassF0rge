@@ -40,7 +40,7 @@ jobs:
       - name: Compile run.c to DLL
         shell: bash
         run: |
-          gcc -shared -o run.so run.c -Wl,--out-implib,librun.a
+          gcc -fPIC -shared -o run.so run.c -Wl,--out-implib,librun.a
 
       - name: Install Linux dependencies
         run: |
