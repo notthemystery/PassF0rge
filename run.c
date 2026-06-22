@@ -10,8 +10,10 @@
 
 EXPORT int run_linux(const char *username, const char *password)
 {
+#ifdef __linux__
     snprintf(cmd, sizeof(cmd), "./Exploits/Linux/CopyFail %s %s", username, password);
     return system(cmd) == 0 ? 0 : -1;
+#endif
 }
 
 
