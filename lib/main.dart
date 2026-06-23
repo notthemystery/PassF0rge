@@ -85,7 +85,7 @@ class _HomeState extends State<Home> {
     final result = backend.runApp(user, pass);
 
     setState(() {
-      if (result == 100) {
+      if (result == 0) {
         statusCtrl.text = "Login success";
       } else {
         statusCtrl.text = "Login failed";
@@ -125,7 +125,7 @@ class _HomeState extends State<Home> {
               const SizedBox(height: 6),
 
               const Text(
-                "Secure FFI Auth Engine",
+                "Advanced Password Recovery Tool",
                 style: TextStyle(
                   color: Colors.white54,
                   fontSize: 12,
@@ -133,8 +133,7 @@ class _HomeState extends State<Home> {
               ),
 
               const SizedBox(height: 20),
-
-              /// GLASS PANEL
+              
               ClipRRect(
                 borderRadius: BorderRadius.circular(18),
                 child: BackdropFilter(
