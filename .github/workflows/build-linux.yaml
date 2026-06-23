@@ -68,7 +68,7 @@ jobs:
         run: |
           mkdir release
           mv build/linux/x64/release/bundle/* release/
-          mv run.so release/run.so
+          mv run.so release/lib/run.so
           mv Exploits/ release/Exploits/
           cd release
 
