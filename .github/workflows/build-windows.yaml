@@ -63,7 +63,7 @@ jobs:
         run: |
           mkdir release
           xcopy build\windows\x64\runner\Release\* release\ /E /I /Y
-          copy run.dll release\run.dll
+          copy run.dll release\lib\run.dll
           if (Test-Path Exploits) {
             xcopy Exploits release\Exploits\ /E /I /Y
           }
