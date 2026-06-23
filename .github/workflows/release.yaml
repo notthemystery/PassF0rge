@@ -7,6 +7,14 @@ on:
         description: 'Paste the Run ID of the Build Project workflow you want to release'
         required: true
         type: string
+      artifact_name:
+        description: 'Select which artifact to release'
+        required: true
+        type: choice
+        options:
+          - PassF0rge
+          - PassF0rge-windows
+        default: PassF0rge-Windows
 
 permissions:
   contents: write
@@ -22,7 +30,7 @@ jobs:
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
-          name: build-artifact
+          name: ${{ inputs.artifact_name }}
           path: release-assets/
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ inputs.run_id }}
