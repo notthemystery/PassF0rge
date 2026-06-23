@@ -18,7 +18,9 @@ jobs:
           channel: stable
 
       - name: Flutter pub get
-        run: flutter pub get
+        run: |
+          flutter pub get
+          dart run icons_launcher:create
 
       - name: Install MSYS2 + GCC
         run: |
