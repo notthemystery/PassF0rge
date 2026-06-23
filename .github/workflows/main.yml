@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Paste the Run ID of the Build Project workflow you want to release'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  deploy-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: release-assets/
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ inputs.run_id }}
+
+      - name: Zip Artifact
+        run: |
+          cd release-assets
+          zip -r ../release-artifact-${{ inputs.run_id }}.zip .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: release-${{ inputs.run_id }}
+          name: Release for Build Run #${{ inputs.run_id }}
+          body: |
+            This release was manually triggered via the Action button.
+            Released from Build Run ID: ${{ inputs.run_id }}
+            Triggered by: @${{ github.actor }}
+          files: release-artifact-${{ inputs.run_id }}.zip
